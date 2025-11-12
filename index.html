@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripMyJatim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <img src="peta jawa timur 2.png" alt="Peta Jawa Timur" class="peta">
+        <h1> TripMyJatim</h1>
+        <p>Hitung estimasi jarak, waktu, dan biaya antara destinasi di Jawa Timur.</p>
+
+        <form id="travelForm">
+            <label for="lokasiAwal">Lokasi Awal:</label>
+            <select id="lokasiAwal" required>
+                <option value="">-- Pilih Destinasi Awal --</option>
+                </select>
+
+            <label for="lokasiTujuan">Lokasi Tujuan:</label>
+            <select id="lokasiTujuan" required>
+                <option value="">-- Pilih Destinasi Tujuan --</option>
+                </select>
+
+            <button type="submit">Hitung Perjalanan</button>
+        </form>
+
+        <div id="hasilPerhitungan" class="hasil">
+            </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
