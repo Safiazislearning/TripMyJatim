@@ -31,8 +31,8 @@ const formatter = new Intl.NumberFormat('id-ID', {
 
 function populateDestinations() {
     // Mengisi opsi (select) dengan data destinasi
-    const selectAwal = document.getElementById('lokasiAwal');
-    const selectTujuan = document.getElementById('lokasiTujuan');
+    const selectPertama = document.getElementById('lokasiPertama');
+    const selectKedua = document.getElementById('lokasiKedua');
 
     for (const key in DATA_WISATA) {
         const option = document.createElement('option');
@@ -40,36 +40,36 @@ function populateDestinations() {
         option.textContent = DATA_WISATA[key].nama;
         
         // Kloning elemen option untuk select tujuan
-        selectAwal.appendChild(option.cloneNode(true));
-        selectTujuan.appendChild(option);
+        selectPertama.appendChild(option.cloneNode(true));
+        selectKedua.appendChild(option);
     }
 }
 
 function hitungPerjalanan(event) {
     event.preventDefault(); // Mencegah form submit/refresh
     
-    const awalKey = document.getElementById('lokasiAwal').value;
-    const tujuanKey = document.getElementById('lokasiTujuan').value;
+    const pertamaKey = document.getElementById('lokasiPertama').value;
+    const keduaKey = document.getElementById('lokasiKedua').value;
     const hasilDiv = document.getElementById('hasilPerhitungan');
     hasilDiv.innerHTML = ''; // Bersihkan hasil sebelumnya
 
-    if (!awalKey || !tujuanKey) {
+    if (!pertamaKey || !keduaKey) {
         hasilDiv.innerHTML = 'Pilih lokasi awal dan tujuan terlebih dahulu.';
         return;
     }
 
-    const dataAwal = DATA_WISATA[awalKey];
-    const dataTujuan = DATA_WISATA[tujuanKey];
+    const dataPertama = DATA_WISATA[pertamaKey];
+    const dataKedua = DATA_WISATA[keduaKey];
 
     // Perhitungan Jarak (km)
-    const jarakKm = Math.abs(dataTujuan.jarak_dari_kediri - dataAwal.jarak_dari_kediri);
+    const jarakKm = Math.abs(dataKedua.jarak_dari_kediri - dataPertama.jarak_dari_kediri);
 
     // Perhitungan Waktu (jam)
     const waktuJam = jarakKm / KECEPATAN_RATA_RATA_KMH;
     const waktuMenit = Math.round(waktuJam * 60);
 
     // Perhitungan Biaya
-    const biayaTiket = dataTujuan.tiket;
+    const biayaTiket = dataKedua.tiket;
     const literBBM = jarakKm / KONSUMSI_BBM_KM_PER_LITER;
     const biayaBBM = literBBM * HARGA_BBM_PER_LITER;
     const totalBiaya = biayaTiket + biayaBBM;
@@ -77,10 +77,10 @@ function hitungPerjalanan(event) {
     // Output ke HTML
     hasilDiv.innerHTML = `
         <h3>📝 Hasil Estimasi Perjalanan</h3>
-        <p>Dari: <strong>${dataAwal.nama}</strong> menuju <strong>${dataTujuan.nama}</strong></p>
+        <p>Dari: <strong>${dataPertama.nama}</strong> menuju <strong>${dataKedua.nama}</strong></p>
         <hr>
         <p>Jarak Tempuh Total: <strong>${jarakKm.toFixed(2)} km</strong></p>
-        <p>Estimasi Waktu Tempuh: <strong>${waktuJam.toFixed(2)} jam</strong> (${waktuMenit} menit)</p>
+        <p>Estimasi Waktu Tempuh: <strong>${waktuJam.toFixed(2)} jam</strong> (± ${waktuMenit} menit)</p>
         <hr>
         <h4>DETAIL BIAYA:</h4>
         <p>- Biaya Tiket Masuk: ${formatter.format(biayaTiket)}</p>
