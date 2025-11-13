@@ -12,7 +12,8 @@ const DATA_WISATA = {
     "pantai_balekambang": {nama: "Pantai Balekambang (Malang)", tiket: 15000, jarak_dari_kediri: 160},
     "air_terjun_tumpak_sewu": {nama: "Air Terjun Tumpak Sewu (Lumajang)", tiket: 20000, jarak_dari_kediri: 195},
     "pantai_tambakrejo": {nama: "Pantai Tambakrejo (Blitar)", tiket: 15000, jarak_dari_kediri: 95},
-    "pantai_tiga_warna": {nama: "Pantai Tiga Warna", tiket: 10000, jarak_dari_kediri: 134}
+    "pantai_tiga_warna": {nama: "Pantai Tiga Warna", tiket: 10000, jarak_dari_kediri: 134},
+    "taman_doraemon": {nama: "Taman Doraemon", tiket: 5000, jarak_dari_kediri: 19}
 };
 // Konstanta perhitungan
 const HARGA_BBM_PER_LITER = 12000;
