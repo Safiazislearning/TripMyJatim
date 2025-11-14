@@ -16,9 +16,18 @@ const DATA_WISATA = {
     "taman_doraemon": {nama: "Taman Doraemon", tiket: 5000, jarak_dari_kediri: 19}
 };
 // Konstanta perhitungan
-const HARGA_BBM_PER_LITER = 12000;
-const KONSUMSI_BBM_KM_PER_LITER = 15;
-const KECEPATAN_RATA_RATA_KMH = 60;
+const DATA_BENSIN = {
+    "pertalite": {jenis: "Pertalite", harga: 12000, BBM_kilometer_per_liter: 20},
+    "pertamax": {jenis: "Pertamax", harga: 14000, BBM_kilometer_per_liter: 40}
+};
+
+// Standarnya motor beat dan mobil avanza
+const DATA_KENDARAAN = {
+    "motor": {tipe: "Motor", KECEPATAN_RATA_RATA_KMH: 60},
+    "mobil": {tipe: "Mobil", KECEPATAN_RATA_RATA_KMH: 80}
+};
+
+// const KECEPATAN_RATA_RATA_KMH = 60;
 
 // Helper untuk format mata uang IDR
 const formatter = new Intl.NumberFormat('id-ID', {
@@ -33,6 +42,8 @@ function populateDestinations() {
     // Mengisi opsi (select) dengan data destinasi
     const selectPertama = document.getElementById('lokasiPertama');
     const selectKedua = document.getElementById('lokasiKedua');
+    const selectBakar = document.getElementById('bahanBakar');
+    
 
     for (const key in DATA_WISATA) {
         const option = document.createElement('option');
@@ -43,6 +54,22 @@ function populateDestinations() {
         selectPertama.appendChild(option.cloneNode(true));
         selectKedua.appendChild(option);
     }
+
+    for (const key in DATA_BENSIN) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = DATA_BENSIN[key].jenis;
+
+        selectBakar.appendChild(option);
+    }
+
+    for (const key in DATA_KENDARAAN) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = DATA_KENDARAAN[key].tipe;
+
+        document.getElementById('alatTransportasi').appendChild(option);
+    }
 }
 
 function hitungPerjalanan(event) {
@@ -50,40 +77,49 @@ function hitungPerjalanan(event) {
     
     const pertamaKey = document.getElementById('lokasiPertama').value;
     const keduaKey = document.getElementById('lokasiKedua').value;
+    const bensinKey = document.getElementById('bahanBakar').value;
+    const transportKey = document.getElementById('alatTransportasi').value;
     const hasilDiv = document.getElementById('hasilPerhitungan');
     hasilDiv.innerHTML = ''; // Bersihkan hasil sebelumnya
 
-    if (!pertamaKey || !keduaKey) {
-        hasilDiv.innerHTML = 'Pilih lokasi awal dan tujuan terlebih dahulu.';
+    if (!pertamaKey || !keduaKey || !bensinKey || !transportKey) {
+        hasilDiv.innerHTML = 'Pilih lokasi awal, tujuan dan jenis BBM terlebih dahulu.';
         return;
     }
 
-    const dataPertama = DATA_WISATA[pertamaKey];
-    const dataKedua = DATA_WISATA[keduaKey];
+    const asal = DATA_WISATA[pertamaKey];
+    const tujuan = DATA_WISATA[keduaKey];
+    const bbm = DATA_BENSIN[bensinKey];
+    const kendaraan = DATA_KENDARAAN[transportKey];
 
     // Perhitungan Jarak (km)
-    const jarakKm = Math.abs(dataKedua.jarak_dari_kediri - dataPertama.jarak_dari_kediri);
+    const jarakKm = Math.abs(tujuan.jarak_dari_kediri - asal.jarak_dari_kediri);
 
     // Perhitungan Waktu (jam)
-    const waktuJam = jarakKm / KECEPATAN_RATA_RATA_KMH;
+    const waktuJam = jarakKm / kendaraan.KECEPATAN_RATA_RATA_KMH;
     const waktuMenit = Math.round(waktuJam * 60);
 
     // Perhitungan Biaya
-    const biayaTiket = dataKedua.tiket;
-    const literBBM = jarakKm / KONSUMSI_BBM_KM_PER_LITER;
-    const biayaBBM = literBBM * HARGA_BBM_PER_LITER;
+    const biayaTiket = tujuan.tiket;
+    const literBBM = jarakKm / bbm.BBM_kilometer_per_liter;
+    const biayaBBM = literBBM * bbm.harga * 2;
     const totalBiaya = biayaTiket + biayaBBM;
+    const hargaBensin = bbm.harga;
 
     // Output ke HTML
     hasilDiv.innerHTML = `
         <h3>📝 Hasil Estimasi Perjalanan</h3>
-        <p>Dari: <strong>${dataPertama.nama}</strong> menuju <strong>${dataKedua.nama}</strong></p>
+        <p>Dari: <strong>${asal.nama}</strong> menuju <strong>${tujuan.nama}</strong></p>
         <hr>
         <p>Jarak Tempuh Total: <strong>${jarakKm.toFixed(2)} km</strong></p>
-        <p>Estimasi Waktu Tempuh: <strong>${waktuJam.toFixed(2)} jam</strong> (± ${waktuMenit} menit)</p>
+        <p>Estimasi Waktu Tempuh: Menggunakan ${(kendaraan.tipe)} <strong>${waktuJam.toFixed(2)} jam</strong> (± ${waktuMenit} menit)</p>
         <hr>
         <h4>DETAIL BIAYA:</h4>
         <p>- Biaya Tiket Masuk: ${formatter.format(biayaTiket)}</p>
+        <h4>DETAIL BIAYA BBM:</h4>
+        <p>- Harga per liter: ${formatter.format(hargaBensin)}</p>
+        <p>- Konsumsi: 1 liter untuk <b>${bbm.BBM_kilometer_per_liter} km</b></p>
+        <p>- Pemakaian BBM: ${literBBM.toFixed(2)} liter</p>
         <p>- Estimasi Biaya BBM (Pulang-Pergi): ${formatter.format(biayaBBM)}</p>
         <h3>TOTAL BIAYA ESTIMASI: <span style="color: #d9534f;">${formatter.format(totalBiaya)}</span></h3>
     `;
