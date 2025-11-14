@@ -15,19 +15,18 @@ const DATA_WISATA = {
     "pantai_tiga_warna": {nama: "Pantai Tiga Warna", tiket: 10000, jarak_dari_kediri: 134},
     "taman_doraemon": {nama: "Taman Doraemon", tiket: 5000, jarak_dari_kediri: 19}
 };
-// Konstanta perhitungan
+// Perkiraan data harga bahan bakar dan konsumsi BBM (km/liter)
 const DATA_BENSIN = {
     "pertalite": {jenis: "Pertalite", harga: 12000, BBM_kilometer_per_liter: 20},
     "pertamax": {jenis: "Pertamax", harga: 14000, BBM_kilometer_per_liter: 40}
 };
 
-// Standarnya motor beat dan mobil avanza
+// Perkiraan kecepatan rata-rata kendaraan (km/jam)
 const DATA_KENDARAAN = {
     "motor": {tipe: "Motor", KECEPATAN_RATA_RATA_KMH: 60},
     "mobil": {tipe: "Mobil", KECEPATAN_RATA_RATA_KMH: 80}
 };
 
-// const KECEPATAN_RATA_RATA_KMH = 60;
 
 // Helper untuk format mata uang IDR
 const formatter = new Intl.NumberFormat('id-ID', {
@@ -112,7 +111,7 @@ function hitungPerjalanan(event) {
         <p>Dari: <strong>${asal.nama}</strong> menuju <strong>${tujuan.nama}</strong></p>
         <hr>
         <p>Jarak Tempuh Total: <strong>${jarakKm.toFixed(2)} km</strong></p>
-        <p>Estimasi Waktu Tempuh: Menggunakan ${(kendaraan.tipe)} <strong>${waktuJam.toFixed(2)} jam</strong> (± ${waktuMenit} menit)</p>
+        <p>Estimasi Waktu Tempuh: Menggunakan ${(kendaraan.tipe)} <strong>${waktuJam.toFixed(2)} jam</strong> <br> (± ${waktuMenit} menit)</p>
         <hr>
         <h4>DETAIL BIAYA:</h4>
         <p>- Biaya Tiket Masuk: ${formatter.format(biayaTiket)}</p>
